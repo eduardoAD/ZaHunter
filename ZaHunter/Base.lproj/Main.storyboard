@@ -19,6 +19,13 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="xIh-yE-kdZ">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <label key="tableFooterView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Footer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ojl-pV-ZQa">
+                                    <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cellID" textLabel="TWm-bf-VWf" detailTextLabel="i90-jU-GJ6" style="IBUITableViewCellStyleValue1" id="jVq-k3-tQt">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -71,6 +78,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="k44-LY-Uyf"/>
                     <connections>
+                        <outlet property="footerLabel" destination="ojl-pV-ZQa" id="qwU-2h-wQC"/>
                         <outlet property="tableView" destination="xIh-yE-kdZ" id="l8i-w4-yzW"/>
                     </connections>
                 </viewController>

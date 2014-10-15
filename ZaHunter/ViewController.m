@@ -16,6 +16,8 @@
 @property CLPlacemark *currentLocation;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property NSArray *pizzaArray;
+@property double numberTotalTime;
+@property (strong, nonatomic) IBOutlet UILabel *footerLabel;
 @end
 
 @implementation ViewController
@@ -26,10 +28,11 @@
     [self.myLocationManager requestWhenInUseAuthorization];
     self.myLocationManager.delegate = self;
 
+    self.footerLabel.text = @"";
     [self.myLocationManager startUpdatingLocation];
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [self.pizzaArray count];
 }
 
@@ -79,12 +82,10 @@
         allPizzaItems = [allPizzaItems sortedArrayUsingComparator:^NSComparisonResult(MKMapItem *objectOne, MKMapItem *objectTwo) {
             float distanceOne = [objectOne.placemark.location distanceFromLocation:self.currentLocation.location];
             float distanceTwo = [objectTwo.placemark.location distanceFromLocation:self.currentLocation.location];
-            if (distanceOne < distanceTwo)
-            {
+            if (distanceOne < distanceTwo){
                 return NSOrderedAscending;
             }
-            else
-            {
+            else{
                 return NSOrderedDescending;
             }
         }];
@@ -99,12 +100,32 @@
         allPizzaItems = [allPizzaItems subarrayWithRange:fourPizzaItems];
 
         self.pizzaArray = allPizzaItems;
+        [self calculateWalkingTime];
         [self.tableView reloadData];
     }];
 }
 
+- (void)calculateWalkingTime{
+    MKMapItem *source = [MKMapItem mapItemForCurrentLocation];
+    self.numberTotalTime = 0.0;
+    double muggleTime = 50;
 
-
+    for (MKMapItem *destination in self.pizzaArray) {
+        MKDirectionsRequest *request = [MKDirectionsRequest new];
+        request.source = source;
+        request.destination = destination;
+        request.transportType = MKDirectionsTransportTypeWalking;
+        MKDirections *directions = [[MKDirections alloc] initWithRequest:request];
+        [directions calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse *response, NSError *error)
+         {
+             MKRoute *route = response.routes.firstObject;
+             self.numberTotalTime += route.expectedTravelTime/60 + muggleTime;
+             //NSLog(@"%.2f minutes", self.numberTotalTime);
+             self.footerLabel.text = [NSString stringWithFormat:@"%.2f minutes", self.numberTotalTime];
+         }];
+        source = destination;
+    }
+}
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
     UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Error"
