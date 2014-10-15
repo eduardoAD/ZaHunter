@@ -30,8 +30,7 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    //return [self.pizzaArray count];
-    return 4;
+    return [self.pizzaArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -89,6 +88,15 @@
                 return NSOrderedDescending;
             }
         }];
+
+        NSRange fourPizzaItems;
+        if (allPizzaItems.count >= 4){
+            fourPizzaItems = NSMakeRange(0, 4);
+        }
+        else{
+            fourPizzaItems = NSMakeRange(0, allPizzaItems.count);
+        }
+        allPizzaItems = [allPizzaItems subarrayWithRange:fourPizzaItems];
 
         self.pizzaArray = allPizzaItems;
         [self.tableView reloadData];
