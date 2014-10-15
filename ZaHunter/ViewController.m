@@ -13,6 +13,7 @@
 
 @interface ViewController () <CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate>
 @property CLLocationManager *myLocationManager;
+@property CLPlacemark *currentLocation;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property NSArray *pizzaArray;
 @end
@@ -38,6 +39,9 @@
     MKMapItem *item = [self.pizzaArray objectAtIndex:indexPath.row];
     cell.textLabel.text = [item name];
 
+    float distance = [item.placemark.location distanceFromLocation:self.currentLocation.location];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%.2f meters", distance];
+
     return cell;
 }
 
@@ -56,10 +60,13 @@
 - (void)reverseGeocode:(CLLocation *)location{
     CLGeocoder *geocoder = [CLGeocoder new];
     [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-        CLPlacemark *placemark = placemarks.firstObject;
-        NSString *address = [NSString stringWithFormat:@"%@ %@ \n%@",placemark.subThoroughfare,placemark.thoroughfare,placemark.locality];
+        self.currentLocation = placemarks.firstObject;
+        NSString *address = [NSString stringWithFormat:@"%@, %@ at %@",
+                             self.currentLocation.subThoroughfare,
+                             self.currentLocation.thoroughfare,
+                             self.currentLocation.locality];
         NSLog(@"Found you: %@",address);
-        [self findPizzaNear:placemark.location];
+        [self findPizzaNear:self.currentLocation.location];
     }];
 }
 
