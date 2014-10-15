@@ -30,7 +30,8 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.pizzaArray count];
+    //return [self.pizzaArray count];
+    return 4;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -44,7 +45,6 @@
 
     return cell;
 }
-
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     for (CLLocation *location in locations) {
@@ -73,16 +73,27 @@
 - (void)findPizzaNear:(CLLocation *)location{
     MKLocalSearchRequest *request = [MKLocalSearchRequest new];
     request.naturalLanguageQuery = @"pizza";
-    request.region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(1, 1));
+    request.region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(.1, .1));
     MKLocalSearch *search = [[MKLocalSearch alloc] initWithRequest:request];
     [search startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error) {
-        self.pizzaArray = response.mapItems;
+        NSArray *allPizzaItems = response.mapItems;
+        allPizzaItems = [allPizzaItems sortedArrayUsingComparator:^NSComparisonResult(MKMapItem *objectOne, MKMapItem *objectTwo) {
+            float distanceOne = [objectOne.placemark.location distanceFromLocation:self.currentLocation.location];
+            float distanceTwo = [objectTwo.placemark.location distanceFromLocation:self.currentLocation.location];
+            if (distanceOne < distanceTwo)
+            {
+                return NSOrderedAscending;
+            }
+            else
+            {
+                return NSOrderedDescending;
+            }
+        }];
+
+        self.pizzaArray = allPizzaItems;
         [self.tableView reloadData];
     }];
 }
-
-
-
 
 
 
