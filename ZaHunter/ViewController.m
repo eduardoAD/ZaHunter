@@ -11,10 +11,11 @@
 #import <MapKit/MapKit.h>
 
 
-@interface ViewController () <CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface ViewController () <MKMapViewDelegate, CLLocationManagerDelegate, UITableViewDataSource, UITableViewDelegate>
 @property CLLocationManager *myLocationManager;
 @property CLPlacemark *currentLocation;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet MKMapView *mapView;
 @property NSArray *pizzaArray;
 @property double numberTotalTime;
 @property (strong, nonatomic) IBOutlet UILabel *footerLabel;
@@ -24,6 +25,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     self.myLocationManager = [[CLLocationManager alloc] init];
     [self.myLocationManager requestWhenInUseAuthorization];
     self.myLocationManager.delegate = self;
@@ -102,6 +104,8 @@
         self.pizzaArray = allPizzaItems;
         [self calculateWalkingTime];
         [self.tableView reloadData];
+        [self addAnnotations];
+        [self zoomIn];
     }];
 }
 
@@ -126,6 +130,49 @@
         source = destination;
     }
 }
+
+- (void)addAnnotations{
+    for (MKMapItem *mapItem in self.pizzaArray) {
+        MKPointAnnotation *annotation = [[MKPointAnnotation alloc]init];
+        annotation.coordinate = mapItem.placemark.coordinate;
+        annotation.title = mapItem.name;
+        float distance = [mapItem.placemark.location distanceFromLocation:self.currentLocation.location];
+        annotation.subtitle = [NSString stringWithFormat:@"%.2f meters", distance];
+
+        [self.mapView addAnnotation:annotation];
+    }
+}
+
+- (void)zoomIn{
+    CLLocation *location = self.currentLocation.location;
+
+    CLLocationCoordinate2D zoom;
+    zoom.latitude = location.coordinate.latitude;
+    zoom.longitude = location.coordinate.longitude;
+
+    MKCoordinateSpan span;
+    span.latitudeDelta = .05;
+    span.longitudeDelta = .05;
+
+    MKCoordinateRegion region;
+    region.center = zoom;
+    region.span = span;
+    [self.mapView setRegion:region animated:YES];
+    [self.mapView regionThatFits:region];
+}
+
+- (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
+    if (annotation == mapView.userLocation) {
+        return nil;
+    }
+    MKPinAnnotationView *pin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"MyPinID"];
+    pin.canShowCallout = YES;
+    pin.rightCalloutAccessoryView = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    pin.image = [UIImage imageNamed:@"PieceOfPizza"];
+    
+    return pin;
+}
+
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error{
     UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"Error"
