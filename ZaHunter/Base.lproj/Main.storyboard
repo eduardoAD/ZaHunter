@@ -55,9 +55,6 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="0.0" y="0.0" width="400" height="600"/>
-                                </variation>
                                 <connections>
                                     <outlet property="dataSource" destination="vXZ-lx-hvc" id="xJN-rx-SMz"/>
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="SpB-Yj-YuL"/>
@@ -65,14 +62,32 @@
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="xIh-yE-kdZ" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="FX1-Qa-pLQ"/>
+                            <constraint firstItem="xIh-yE-kdZ" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="InH-Yx-S0y"/>
+                            <constraint firstAttribute="trailing" secondItem="xIh-yE-kdZ" secondAttribute="trailing" id="ibK-nv-z1W"/>
+                            <constraint firstAttribute="bottom" secondItem="xIh-yE-kdZ" secondAttribute="bottom" id="sZD-Mf-t06"/>
+                        </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="xIh-yE-kdZ"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="FX1-Qa-pLQ"/>
+                                <exclude reference="InH-Yx-S0y"/>
+                                <exclude reference="ibK-nv-z1W"/>
+                                <exclude reference="sZD-Mf-t06"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="xIh-yE-kdZ"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="FX1-Qa-pLQ"/>
+                                <include reference="InH-Yx-S0y"/>
+                                <include reference="ibK-nv-z1W"/>
+                                <include reference="sZD-Mf-t06"/>
                             </mask>
                         </variation>
                     </view>
@@ -96,27 +111,43 @@
                         <viewControllerLayoutGuide type="bottom" id="uJf-Lh-zYB"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="xA2-7z-pES">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sSx-Ja-5yO">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="0.0" y="0.0" width="400" height="600"/>
-                                </variation>
                                 <connections>
                                     <outlet property="delegate" destination="jIx-Bb-bAB" id="TxG-hC-0Pv"/>
                                 </connections>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="sSx-Ja-5yO" secondAttribute="bottom" id="C8e-fo-iAe"/>
+                            <constraint firstAttribute="trailing" secondItem="sSx-Ja-5yO" secondAttribute="trailing" id="Doh-fs-jtf"/>
+                            <constraint firstItem="sSx-Ja-5yO" firstAttribute="top" secondItem="xA2-7z-pES" secondAttribute="top" id="Rq4-P4-85F"/>
+                            <constraint firstItem="sSx-Ja-5yO" firstAttribute="leading" secondItem="xA2-7z-pES" secondAttribute="leading" id="knv-3g-5Qb"/>
+                        </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="sSx-Ja-5yO"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="C8e-fo-iAe"/>
+                                <exclude reference="Doh-fs-jtf"/>
+                                <exclude reference="Rq4-P4-85F"/>
+                                <exclude reference="knv-3g-5Qb"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="sSx-Ja-5yO"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="C8e-fo-iAe"/>
+                                <include reference="Doh-fs-jtf"/>
+                                <include reference="Rq4-P4-85F"/>
+                                <include reference="knv-3g-5Qb"/>
                             </mask>
                         </variation>
                     </view>
